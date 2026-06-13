@@ -13,46 +13,31 @@ from app.schemas import (
     JobResultsResponse, JobListItem, TransactionSchema, NarrativeSummarySchema
 )
 from app.tasks import process_transaction_csv
-from rich.console import Console
-from rich.panel import Panel
-from rich.text import Text
-from rich.table import Table
-
-console = Console()
-
 # Create database tables on startup
 Base.metadata.create_all(bind=engine)
 
 def print_banner():
-    banner_text = """
-    ___    ____   ____  ____  ____  ________  __
-   /   |  /  _/  / __ \/ __ \/ __ \/ ____/ / / /
-  / /| |  / /   / /_/ / / / / / / / / __/ /_/ / 
- / ___ |_/ /   / ____/ /_/ / /_/ / /_/ / __  /  
-/_/  |_/___/  /_/    \____/\____/\____/_/ /_/   
-                                                
-    """
-    banner = Text(banner_text, style="bold magenta")
-    console.print(Panel(
-        banner, 
-        subtitle="[bold cyan]AI Transaction Processing Pipeline v1.0.0[/bold cyan]", 
-        border_style="magenta",
-        padding=(1, 4)
-    ))
-    
-    table = Table(title="Available API Endpoints", show_header=True, header_style="bold cyan", box=None)
-    table.add_column("Method", style="bold green")
-    table.add_column("Endpoint", style="white")
-    table.add_column("Description", style="dim")
-    
-    table.add_row("POST", "/jobs/upload", "Upload CSV and start processing")
-    table.add_row("GET", "/jobs/{id}/status", "Check job processing status")
-    table.add_row("GET", "/jobs/{id}/results", "Retrieve full analysis results")
-    table.add_row("GET", "/jobs", "List all transaction jobs")
-    table.add_row("GET", "/docs", "Interactive Swagger UI")
-    
-    console.print(table)
-    console.print("\n[bold green]System online.[/bold green] All services responding.\n")
+    banner = """╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│        ___    ____   ____  ____  ____  ________  __                          │
+│       /   |  /  _/  / __ \/ __ \/ __ \/ ____/ / / /                          │
+│      / /| |  / /   / /_/ / / / / / / / / __/ /_/ /                           │
+│     / ___ |_/ /   / ____/ /_/ / /_/ / /_/ / __  /                            │
+│    /_/  |_/___/  /_/    \____/\____/\____/_/ /_/                             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+╰───────────────── AI Transaction Processing Pipeline v1.0.0 ──────────────────╯"""
+    print(banner)
+    print("                    Available API Endpoints")
+    print(" Method   Endpoint             Description                     ")
+    print(" POST     /jobs/upload         Upload CSV and start processing ")
+    print(" GET      /jobs/{id}/status    Check job processing status     ")
+    print(" GET      /jobs/{id}/results   Retrieve full analysis results  ")
+    print(" GET      /jobs                List all transaction jobs       ")
+    print(" GET      /docs                Interactive Swagger UI          ")
+    print("\nSystem online. All services responding.\n")
 
 print_banner()
 

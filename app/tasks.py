@@ -8,17 +8,16 @@ from app.celery_app import celery_app
 from app.database import SessionLocal
 from app.models import Job, Transaction, JobSummary
 from app.llm import classify_transactions_batch, generate_narrative_summary, rule_based_fallback_categorization
-from rich.console import Console
-from rich.theme import Theme
+import re
 
-custom_theme = Theme({
-    "info": "cyan",
-    "warning": "yellow",
-    "error": "red",
-    "success": "green",
-    "job": "bold magenta",
-})
-console = Console(theme=custom_theme)
+class SimpleConsole:
+    def print(self, *args, sep=" ", end="\n"):
+        cleaned_args = []
+        for arg in args:
+            cleaned_args.append(re.sub(r"\[/?([a-zA-Z0-9_\.\s/-]*)\]", "", str(arg)))
+        print(sep.join(cleaned_args), end=end)
+
+console = SimpleConsole()
 
 @celery_app.task(name="app.tasks.process_transaction_csv")
 def process_transaction_csv(job_id: str, file_path: str):
